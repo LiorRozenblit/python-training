@@ -15,16 +15,44 @@ class Matrix:
             onlyOne = []
         return tuple(unity)
 
-
     def ones(self):
-        z = []
-        y = []
+        ones = []
+        currentTuple = []
         for i in range(self):
-            while len(y) < self:
-                y.append(1)
-            z.append(tuple(y))
-        return tuple(z)
+            while len(currentTuple) < self:
+                currentTuple.append(1)
+            ones.append(tuple(currentTuple))
+        return tuple(ones)
+
+    def __str__(self):
+        return '{}'.format(self.__currentMatrix)
+
+    def __repr__(self):
+        return 'Matrix({})'.format(self.__currentMatrix)
+
+    def tuples(self):
+        self.__currentMatrix = tuple(self.__currentMatrix)
+        return self.__currentMatrix
+
+    def __add__(self, other):
+        add = []
+        add2 = []
+        y = self.tuples()
+        if type(other) != tuple:
+            x = other.tuples()
+        else:
+            x = other
+        for i in range(len(y[1])):
+            for j in range(len(y[1])):
+                add.append(y[i][j] + x[i][j])
+            add2.append(tuple(add))
+            add = []
+        return 'Matrix({})'.format(tuple(add2))
 
 
-print(Matrix.unity(4))
-print(Matrix.ones(3))
+a = Matrix(((1, 2, 5), (3, 5, 4), (7, 9, 3)))
+b = Matrix(((4, 2, 2), (9, 5, 1), (1, 2, 9)))
+print(a + Matrix.unity(3))
+print(b + Matrix.ones(3))
+
+
