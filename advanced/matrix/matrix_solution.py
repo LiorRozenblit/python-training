@@ -13,7 +13,7 @@ class Matrix:
             count += 1
             unity.append(tuple(onlyOne))
             onlyOne = []
-        return tuple(unity)
+        return Matrix(tuple(unity))
 
     def ones(self):
         ones = []
@@ -22,7 +22,7 @@ class Matrix:
             while len(currentTuple) < self:
                 currentTuple.append(1)
             ones.append(tuple(currentTuple))
-        return tuple(ones)
+        return Matrix(tuple(ones))
 
     def __str__(self):
         return '{}'.format(self.__currentMatrix)
@@ -38,10 +38,7 @@ class Matrix:
         add = []
         add2 = []
         y = self.tuples()
-        if type(other) != tuple:
-            x = other.tuples()
-        else:
-            x = other
+        x = other.tuples()
         for i in range(len(y[1])):
             for j in range(len(y[1])):
                 add.append(y[i][j] + x[i][j])
@@ -53,10 +50,7 @@ class Matrix:
         add = []
         add2 = []
         y = self.tuples()
-        if type(other) != tuple:
-            x = other.tuples()
-        else:
-            x = other
+        x = other.tuples()
         for i in range(len(y[1])):
             for j in range(len(y[1])):
                 add.append(y[i][j] - x[i][j])
@@ -64,37 +58,73 @@ class Matrix:
             add = []
         return 'Matrix({})'.format(tuple(add2))
 
-    def __mul__(self, other):
+    def __truediv__(self, other):
+        add = []
         add2 = []
-        add3 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         y = self.tuples()
-        if type(other) != tuple:
-            x = other.tuples()
-        else:
-            x = other
+        x = other
         for i in range(len(y[1])):
             for j in range(len(y[1])):
-                for k in range(len(y[1])):
-                    add3[i][j] += (y[i][k] * x[k][j])
-        add2.append(tuple(add3))
+                add.append(y[i][j] * (1 / x))
+            add2.append(tuple(add))
+            add = []
+        return 'Matrix({})'.format(tuple(add2))
+
+    def __mul__(self, other):
+        add2 = []
+        add3 = []
+        add4 = []
+        sum = 0
+        if (type(self)) == int:
+                x = other.tuples()
+                for i in range(len(x[1])):
+                    for j in range(len(x[1])):
+                        for k in range(self):
+                            sum += x[i][j]
+                        add3.append(sum)
+                        sum = 0
+                    add2.append(tuple(add3))
+                    add3 = []
+        if (type(other)) == int:
+                y = self.tuples()
+                for i in range(len(y[1])):
+                    for j in range(len(y[1])):
+                        for k in range(other):
+                            sum += y[i][j]
+                        add3.append(sum)
+                        sum = 0
+                    add2.append(tuple(add3))
+                    add3 = []
+        else:
+            y = self.tuples()
+            x = other.tuples()
+            for r in range(len(y[1])):
+                add4.append(0)
+            for t in range(len(y[1])):
+                add3.append(add4)
+            for i in range(len(y[1])):
+                for j in range(len(y[1])):
+                    for k in range(len(y[1])):
+                        add3[i][j] += (y[i][k] * x[k][j])
+                add2.append(tuple(add3[i]))
+                add3 = []
+                add4 = []
+                for r in range(len(y[1])):
+                    add4.append(0)
+                for s in range(len(y[1])):
+                    add3.append(add4)
         return 'Matrix({})'.format(tuple(add2))
 
     def __eq__(self, other):
         y = self.tuples()
-        if type(other) != tuple:
-            x = other.tuples()
-        else:
-            x = other
+        x = other.tuples()
         if x == y:
             return True
         return False
 
     def __ne__(self, other):
         y = self.tuples()
-        if type(other) != tuple:
-            x = other.tuples()
-        else:
-            x = other
+        x = other.tuples()
         if x == y:
             return False
         return True
@@ -102,16 +132,12 @@ class Matrix:
 
 a = Matrix(((1, 2, 5), (3, 5, 4), (7, 9, 3)))
 b = Matrix(((4, 2, 2), (9, 5, 1), (1, 2, 9)))
-print(a + Matrix.unity(3))
-print(b + Matrix.ones(3))
-print(a + b)
-print(a - b)
-print(a - Matrix.unity(3))
-print(b - Matrix.ones(3))
-d = Matrix(((1, 2, 5), (3, 5, 4)))
-c = Matrix(((1, 2, 5), (3, 5, 4)))
-print(d == c)
-print(d != c)
-print(a * b)
+print(b * 5)
+print(b * a)
+print(a / 3)
+for line in a:
+    print(line)
+
+
 
 
